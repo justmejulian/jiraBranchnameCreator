@@ -1,0 +1,16 @@
+{
+  "name": "jcbn",
+  "version": "1.0.0",
+  "description": "Create branchname using Jira issues asigned to me.",
+  "main": "index.mjs",
+  "bin": {
+    "jcw": "./index.mjs"
+  },
+  "dependencies": {
+    "clipboardy": "^3.0.0",
+    "dotenv": "^16.0.3",
+    "got": "^12.5.2",
+    "inquirer": "^9.1.4",
+    "node-fetch": "^3.2.10"
+  }
+}
