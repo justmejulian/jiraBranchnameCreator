@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import inquirer from "inquirer";
-import clipboard from 'clipboardy';
+import clipboard from "clipboardy";
 
 import { fetchMyIssues } from "./fetch.mjs";
 
@@ -38,22 +38,24 @@ const passedTitle = selectedIssue.title
 
 let branchName = `${storyType}/${selectedIssue.key}-${passedTitle}`;
 
+const questions = [
+  {
+    type: "editor",
+    name: "editedBranchname",
+    message: "Edit Branchname",
+    default: branchName,
+    waitUserInput: true,
+  },
+];
+
+// ask to shorten name until short enough
 while (branchName.length > 54) {
   console.error("Branchname too long ", branchName.length);
-  const questions = [
-    {
-      type: "editor",
-      name: "editedBranchname",
-      message: "Edit Branchname",
-      default: branchName,
-      waitUserInput: true,
-    },
-  ];
-  await inquirer.prompt(questions).then((answers) => {
-    branchName = answers?.editedBranchname?.trim();
+
+  branchName = await inquirer.prompt(questions).then((answers) => {
+    return answers?.editedBranchname?.trim();
   });
 }
 
 clipboard.writeSync(branchName);
-console.log('copied',branchName, 'to clipboard');
-
+console.log("copied -", branchName, "- to clipboard");
