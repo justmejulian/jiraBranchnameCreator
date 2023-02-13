@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import inquirer from "inquirer";
 import clipboard from "clipboardy";
+import inquirer from "inquirer";
 
 import { fetchMyIssues } from "./fetch.mjs";
 
@@ -10,7 +10,7 @@ const { storyType } = await inquirer.prompt([
     type: "list",
     name: "storyType",
     message: "Choose Story Type",
-    choices: ["feature", "bugfix", "hotfix"],
+    choices: ["feature", "bugfix", "hotfix", "optimization"],
   },
 ]);
 
