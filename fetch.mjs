@@ -18,6 +18,7 @@ export async function fetchMyIssues() {
 
   if (!responseJson?.issues.length) {
     console.error("No issues found");
+    console.error("Are there Issues assigned to you and set to 'In Progress'?");
     process.exit(1);
   }
 
