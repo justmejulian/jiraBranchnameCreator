@@ -11,7 +11,9 @@ const auth = {
 
 export async function fetchMyIssues() {
   // https://energych.atlassian.net/rest/api/2/status
-  const bodyData = `{"jql": "assignee= currentUser() AND status != 5 AND status != 6", "fields": [ "key", "summary" ] }`;
+  // const bodyData = `{"jql": "assignee= currentUser() AND status != 5 AND status != 6", "fields": [ "key", "summary" ] }`;
+  // status 3 -> In Progress
+  const bodyData = `{"jql": "assignee= currentUser() AND status = 3", "fields": [ "key", "summary" ] }`;
   const responseJson = await jiraSeach(bodyData);
 
   if (!responseJson?.issues.length) {
