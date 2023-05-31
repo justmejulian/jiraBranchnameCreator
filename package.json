@@ -4,7 +4,7 @@
   "description": "Create branchname using Jira issues asigned to me.",
   "main": "index.mjs",
   "bin": {
-    "jcw": "./index.mjs"
+    "jcbn": "./index.mjs"
   },
   "dependencies": {
     "clipboardy": "^3.0.0",

@@ -1,7 +1,19 @@
 import fetch from "node-fetch";
 import * as dotenv from "dotenv";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
+
+console.log("DEBUGPRINT[1]: fetch.mjs:8: __dirname=", __dirname)
+
+const dotEnvPath = __dirname + '/.env';
+
+console.log("DEBUGPRINT[4]: fetch.mjs:12: dotEnvPath=", dotEnvPath)
+
+dotenv.config({ path: dotEnvPath });
 
 const auth = {
   domain: process.env.DOMAIN,
