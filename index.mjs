@@ -33,6 +33,7 @@ const { selectedIssue } = await inquirer.prompt([
 
 const passedTitle = selectedIssue.title
   .toLowerCase()
+  .replace(" - ", " ")
   .replace(/\s/g, "-")
   .replace(/[^a-z0-9\-]/gi, "");
 
