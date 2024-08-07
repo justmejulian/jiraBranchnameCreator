@@ -5,7 +5,9 @@ import inquirer from "inquirer";
 
 import { fetchMyIssues } from "./fetch.mjs";
 
-const { storyType } = await inquirer.prompt([
+const prompt = inquirer.createPromptModule({ output: process.stderr })
+
+const { storyType } = await prompt([
   {
     type: "list",
     name: "storyType",
@@ -22,7 +24,7 @@ const issues = fetchedIssues.map((issue) => ({
   value: issue,
 }));
 
-const { selectedIssue } = await inquirer.prompt([
+const { selectedIssue } = await prompt([
   {
     type: "list",
     name: "selectedIssue",
@@ -53,10 +55,9 @@ const questions = [
 while (branchName.length > 54) {
   console.error("Branchname too long ", branchName.length);
 
-  branchName = await inquirer.prompt(questions).then((answers) => {
+  branchName = await prompt(questions).then((answers) => {
     return answers?.editedBranchname?.trim();
   });
 }
 
-clipboard.writeSync(branchName);
-console.log("copied -", branchName, "- to clipboard");
+console.log(branchName);
