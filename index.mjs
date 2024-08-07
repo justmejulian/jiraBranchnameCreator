@@ -5,7 +5,21 @@ import inquirer from "inquirer";
 
 import { fetchMyIssues } from "./fetch.mjs";
 
+const possibleAgrs = {
+  copyToClipboard: '--copy-to-clipboard',
+}
+
 const prompt = inquirer.createPromptModule({ output: process.stderr })
+
+const args = process.argv.slice(2);
+const firstArg = args[0];
+
+if (firstArg) {
+  if (!Object.values(possibleAgrs).includes(firstArg)) {
+    console.warn("Unknown argument", args[0]);
+    process.exit(1);
+  }
+}
 
 const { storyType } = await prompt([
   {
@@ -58,6 +72,12 @@ while (branchName.length > 54) {
   branchName = await prompt(questions).then((answers) => {
     return answers?.editedBranchname?.trim();
   });
+}
+
+if (firstArg === possibleAgrs.copyToClipboard) {
+  clipboard.writeSync(branchName);
+  console.log("copied -", branchName, "- to clipboard");
+  process.exit(0);
 }
 
 console.log(branchName);
