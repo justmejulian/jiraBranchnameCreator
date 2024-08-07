@@ -1,7 +1,14 @@
 import fetch from "node-fetch";
 import * as dotenv from "dotenv";
 
-dotenv.config();
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const dotEnvPath = __dirname + '/.env';
+
+dotenv.config({ path: dotEnvPath });
 
 const auth = {
   domain: process.env.DOMAIN,
@@ -11,11 +18,14 @@ const auth = {
 
 export async function fetchMyIssues() {
   // https://energych.atlassian.net/rest/api/2/status
-  const bodyData = `{"jql": "assignee= currentUser() AND status != 5 AND status != 6", "fields": [ "key", "summary" ] }`;
+  // const bodyData = `{"jql": "assignee= currentUser() AND status != 5 AND status != 6", "fields": [ "key", "summary" ] }`;
+  // status 3 -> In Progress
+  const bodyData = `{"jql": "assignee= currentUser() AND status = 3", "fields": [ "key", "summary" ] }`;
   const responseJson = await jiraSeach(bodyData);
 
   if (!responseJson?.issues.length) {
     console.error("No issues found");
+    console.error("Are there Issues assigned to you and set to 'In Progress'?");
     process.exit(1);
   }
 

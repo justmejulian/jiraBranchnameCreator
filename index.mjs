@@ -5,7 +5,23 @@ import inquirer from "inquirer";
 
 import { fetchMyIssues } from "./fetch.mjs";
 
-const { storyType } = await inquirer.prompt([
+const possibleAgrs = {
+  copyToClipboard: '--copy-to-clipboard',
+}
+
+const prompt = inquirer.createPromptModule({ output: process.stderr })
+
+const args = process.argv.slice(2);
+const firstArg = args[0];
+
+if (firstArg) {
+  if (!Object.values(possibleAgrs).includes(firstArg)) {
+    console.warn("Unknown argument", args[0]);
+    process.exit(1);
+  }
+}
+
+const { storyType } = await prompt([
   {
     type: "list",
     name: "storyType",
@@ -22,7 +38,7 @@ const issues = fetchedIssues.map((issue) => ({
   value: issue,
 }));
 
-const { selectedIssue } = await inquirer.prompt([
+const { selectedIssue } = await prompt([
   {
     type: "list",
     name: "selectedIssue",
@@ -33,6 +49,7 @@ const { selectedIssue } = await inquirer.prompt([
 
 const passedTitle = selectedIssue.title
   .toLowerCase()
+  .replace(" - ", " ")
   .replace(/\s/g, "-")
   .replace(/[^a-z0-9\-]/gi, "");
 
@@ -52,13 +69,17 @@ const questions = [
 while (branchName.length > 54) {
   console.error("Branchname too long ", branchName.length);
 
-  branchName = await inquirer.prompt(questions).then((answers) => {
+  branchName = await prompt(questions).then((answers) => {
     return answers?.editedBranchname?.trim();
   });
 }
 
-// make sure branchname is lowercase due to docker compose naming restrictions
 branchName.toLowerCase();
 
-clipboard.writeSync(branchName);
-console.log("copied -", branchName, "- to clipboard");
+if (firstArg === possibleAgrs.copyToClipboard) {
+  clipboard.writeSync(branchName);
+  console.log("copied -", branchName, "- to clipboard");
+  process.exit(0);
+}
+
+console.log(branchName);

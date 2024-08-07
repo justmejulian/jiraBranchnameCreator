@@ -17,3 +17,11 @@ node index.mjs
 ```
 
 Your resulting branchname will be copied ready for you to use.
+
+## Install
+
+installs globally.
+
+```
+npm link
+```
