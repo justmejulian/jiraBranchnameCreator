@@ -74,6 +74,8 @@ while (branchName.length > 54) {
   });
 }
 
+branchName.toLowerCase();
+
 if (firstArg === possibleAgrs.copyToClipboard) {
   clipboard.writeSync(branchName);
   console.log("copied -", branchName, "- to clipboard");
