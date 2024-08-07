@@ -57,5 +57,8 @@ while (branchName.length > 54) {
   });
 }
 
+// make sure branchname is lowercase due to docker-compose naming restrictions
+branchName.toLowerCase();
+
 clipboard.writeSync(branchName);
 console.log("copied -", branchName, "- to clipboard");
