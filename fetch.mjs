@@ -36,25 +36,37 @@ export async function fetchMyIssues() {
 }
 
 async function jiraSeach(bodyData) {
-  const response = await fetch(
-    "https://energych.atlassian.net/rest/api/3/search",
-    {
-      method: "POST",
+  let response;
+  try {
+    const searchParams = JSON.parse(bodyData);
+    const jql = encodeURIComponent(searchParams.jql);
+    let url = `https://${auth.domain}.atlassian.net/rest/api/3/search?jql=${jql}`;
+
+    if (searchParams.fields) {
+      const fields = searchParams.fields.join(",");
+      url += `&fields=${fields}`;
+    }
+
+    response = await fetch(url, {
+      method: "GET",
       headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
         Authorization: `Basic ${Buffer.from(
           `${auth.email}:${auth.token}`
         ).toString("base64")}`,
         Accept: "application/json",
-        "Content-Type": "application/json",
       },
-      body: bodyData,
-    }
-  ).catch((err) => console.error(err));
+    });
 
-  if (response.status !== 200) {
-    console.error(response.status, response.statusText);
+    if (response.status !== 200) {
+      console.error(response.status, response.statusText);
+      process.exit(1);
+    }
+
+    return JSON.parse(await response.text());
+  } catch (e) {
+    console.error("Error parsing bodyData:", e);
     process.exit(1);
   }
-
-  return JSON.parse(await response.text());
 }
