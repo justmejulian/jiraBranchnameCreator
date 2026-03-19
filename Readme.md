@@ -1,3 +1,5 @@
+Replaced by [Scripts/taskbranch](https://github.com/justmejulian/scripts/tree/main/taskbranch)
+
 # Jira Branchname creator
 
 Create git flow branch name using Jira issues assgined to you.
